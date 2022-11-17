@@ -22,9 +22,9 @@ public class SecurityConfig {
                 .anyExchange().authenticated()
                 .and()
                 .oauth2Login()
-//                .and()
-//                .logout()
-//                .logoutSuccessHandler(oidcServerLogoutSuccessHandler())
+                .and()
+                .logout()
+                .logoutSuccessHandler(oidcServerLogoutSuccessHandler())
                 ;
         return http.build();
     }

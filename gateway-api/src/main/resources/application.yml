@@ -33,7 +33,7 @@ spring:
           predicates:
             - Path=/movies/**
         - id: billsRoute
-          uri: lb://ms-bill
+          uri: lb://bills-service
           predicates:
             - Path=/bills/**
         - id: usersRoute

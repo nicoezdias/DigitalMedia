@@ -71,10 +71,9 @@ services:
     ports:
       - "8082:8080"
     restart: unless-stopped
-    
-# /* --------------------------------------------------------------------------- */
+# /* ---------------------------------------------------------------------------- */
 
-# /* --------------------------------MICROSERVICES-------------------------- */
+# /* --------------------------------EUREKA----------------------------------- */
   eureka-service:
     depends_on:
       - keycloak-service
@@ -83,57 +82,60 @@ services:
     ports:
       - "8761:8761"
     restart: always
-  # movie-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "movie-service"
-  #   environment:
-  #     PORT_MS: 8085
-  #     DB_HOST: mongo-movie
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak:8080/
-  #   image: movie-service
-  #   ports:
-  #     - "8085:8085"
-  #   restart: always
-  # users-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "users-service"
-  #   environment:
-  #     PORT_MS: 8086
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak:8082/ 
-  #   image: users-service
-  #   ports:
-  #     - "8086:8086"
-  #   restart: always
 # /* --------------------------------------------------------------------------- */
 
+# /* --------------------------------MICROSERVICES-------------------------- */
+  movie-service:
+    depends_on:
+      - eureka-service
+    container_name: "movie-service"
+    environment:
+      PORT_MS: 8086
+      DB_HOST: mongo-movie
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/
+    image: movie-service
+    ports:
+      - "8086:8086"
+    restart: always
 
-  # bills-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "bills-service"
-  #   environment:
-  #     DB_HOST: mysqldb
-  #     PORT_MS: 8084
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak:8082/ 
-  #   image: bills-service
-  #   ports:
-  #     - "8084:8084"
-  #   restart: always
+  users-service:
+    depends_on:
+      - eureka-service
+    container_name: "users-service"
+    environment:
+      PORT_MS: 8087
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/ 
+    image: users-service
+    ports:
+      - "8087:8087"
+    restart: always
 
-  # gateway-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "gateway-service"
-  #   environment:
-  #     PORT_MS: 8080
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak:8082/ 
-  #   image: gateway-service
-  #   ports:
-  #     - "8080:8080"
-  #   restart: always
+  bills-service:
+    depends_on:
+      - eureka-service
+    container_name: "bills-service"
+    environment:
+      DB_HOST: mysqldb
+      PORT_MS: 8088
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/ 
+    image: bills-service
+    ports:
+      - "8088:8088"
+    restart: always
+
+  gateway-service:
+    depends_on:
+      - eureka-service
+    container_name: "gateway-service"
+    environment:
+      PORT_MS: 8080
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/ 
+    image: gateway-service
+    ports:
+      - "8080:8080"
+    restart: always
+# /* --------------------------------------------------------------------------- */

@@ -18,7 +18,7 @@ dh:
     serverUrl: ${KEYCLOAK_URL:http://localhost:8082/}
     realm: ${app.realm}
     clientId: microservicios
-    clientSecret: Ke6mZgzHZn7DUlSmcZjuZl58do9SLsqP
+    clientSecret: Xhevm3MBBZPvc6zSOvammf5aEz11vIOM
 
 springdoc:
   show-actuator: true
@@ -56,5 +56,5 @@ spring:
         registration:
           keycloak:
             client-id: microservicios
-            client-secret: Ke6mZgzHZn7DUlSmcZjuZl58do9SLsqP
+            client-secret: Xhevm3MBBZPvc6zSOvammf5aEz11vIOM
             redirect-uri: http://localhost:8085

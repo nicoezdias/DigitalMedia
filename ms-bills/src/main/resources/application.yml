@@ -11,7 +11,7 @@ eureka:
 
 spring:
   application:
-    name: ms-bill
+    name: bills-service
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
@@ -36,5 +36,5 @@ spring:
           keycloak:
             authorization-grant-type: client_credentials
             client-id: internal
-            client-secret: 7N4B7ro7s7XvP4eR0jolwk2VMPiC0mHe
+            client-secret: Lt3qO93ZYAADe0JieYL28sI9Ndla8WNl
             redirect-uri: http://localhost:8084/

@@ -25,14 +25,9 @@ public class UserKeycloackRepository implements IUserKeycloackRepository {
         List<UserRepresentation> userRepresentationList = keycloakClient.realm(realm).users().list();
         List<UserRepresentation> usersEnabled = userRepresentationList.stream().filter(userRepresentation ->
                 !keycloakClient.realm(realm).users().get(userRepresentation.getId())
-                        .groups().stream()
-                        .noneMatch(s -> Objects.equals(s.getName(), "admin")))
+                        .groups().stream().map(grop -> grop.getName())
+                        .collect(Collectors.toList()).contains("admin"))
                 .collect(Collectors.toList());
-//        List<UserRepresentation> usersEnabled = userRepresentationList.stream().filter(userRepresentation ->
-//                !keycloakClient.realm(realm).users().get(userRepresentation.getId())
-//                        .groups().stream().map(grop -> grop.getName())
-//                        .collect(Collectors.toList()).contains("admin"))
-//                .collect(Collectors.toList());
         return usersEnabled.stream().map(this::toUserKeycloakList).collect(Collectors.toList());
     }
     @Override
