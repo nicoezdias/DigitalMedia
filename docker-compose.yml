@@ -1,0 +1,139 @@
+version: '3.9'
+networks:
+  default:
+    name: local_keycloak_network
+services:
+# /* --------------------------------DATABASES-------------------------------- */
+  mongo-movie:
+    image: mongo
+    container_name: "mongo-movie"
+    command: mongod --auth
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    volumes:
+      - ./db/mongo-mvovie:/data/db
+    ports:
+      - "27017:27017"
+  mongo-user:
+    image: mongo
+    container_name: "mongo-user"
+    command: mongod --auth
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    volumes:
+      - ./db/mongo-user:/data/db
+    ports:
+      - "27018:27017"
+  mysqldb:
+    image: mysql:8.0
+    container_name: "mysqldb"
+    restart: always
+    environment:
+      - MYSQL_DATABASE=BillsDB
+      - MYSQL_ROOT_PASSWORD=rootpass
+    volumes:
+      - ./db/mysql-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+  postgres:
+    image: postgres:latest
+    container_name: "postgres"
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - '5439:5439'
+    volumes:
+      - ./db/postgres-data:/var/lib/postgresql/data
+# /* --------------------------------------------------------------------------- */
+
+# /* --------------------------------KEYCLOAK-------------------------------- */
+  keycloak-service:
+    depends_on:
+      - postgres
+    container_name: keycloak-service
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_IMPORT: /realm-digital-house.json
+      KC_DB: postgres
+      KC_DB_PASSWORD: 1234
+      KC_DB_USERNAME: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+    image: quay.io/keycloak/keycloak:18.0.0
+    command: start-dev
+    ports:
+      - "8082:8080"
+    restart: unless-stopped
+    
+# /* --------------------------------------------------------------------------- */
+
+# /* --------------------------------MICROSERVICES-------------------------- */
+  eureka-service:
+    depends_on:
+      - keycloak-service
+    container_name: "eureka-service"
+    image: eureka-service
+    ports:
+      - "8761:8761"
+    restart: always
+  # movie-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "movie-service"
+  #   environment:
+  #     PORT_MS: 8085
+  #     DB_HOST: mongo-movie
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak:8080/
+  #   image: movie-service
+  #   ports:
+  #     - "8085:8085"
+  #   restart: always
+  # users-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "users-service"
+  #   environment:
+  #     PORT_MS: 8086
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak:8082/ 
+  #   image: users-service
+  #   ports:
+  #     - "8086:8086"
+  #   restart: always
+# /* --------------------------------------------------------------------------- */
+
+
+  # bills-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "bills-service"
+  #   environment:
+  #     DB_HOST: mysqldb
+  #     PORT_MS: 8084
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak:8082/ 
+  #   image: bills-service
+  #   ports:
+  #     - "8084:8084"
+  #   restart: always
+
+  # gateway-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "gateway-service"
+  #   environment:
+  #     PORT_MS: 8080
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak:8082/ 
+  #   image: gateway-service
+  #   ports:
+  #     - "8080:8080"
+  #   restart: always
