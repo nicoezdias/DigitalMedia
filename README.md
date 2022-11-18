@@ -10,10 +10,6 @@
 
 ### In the main folder use the command `sh make.sh` to start the whole project.
 
-## gateway-api
-
-### Use the browser to test the gateway-api microservice
-
 ## Ports
 
 ```
@@ -24,3 +20,9 @@ Movies: 8086
 Users: 8087
 Bills: 8088
 ```
+
+## gateway-api
+
+### Use the browser to test the gateway-api microservice
+
+
