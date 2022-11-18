@@ -1,11 +1,11 @@
 # DigitalMedia
 
-### Preconditions
+## Preconditions
 
  > docker installed
 
  > maven installed
 
-### make.sh
+## make.sh
 
-#### In the main folder use the command `sh make.sh` to start the whole project.
+### In the main folder use the command `sh make.sh` to start the whole project.
