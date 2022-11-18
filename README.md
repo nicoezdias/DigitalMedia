@@ -1,10 +1,10 @@
 # DigitalMedia
 
 ### Preconditions:
-#### > installed.
-#### > docker .
+> installed.
+> docker 
 
-#### > maven 
+ > maven 
 
 ### make.sh:
 
