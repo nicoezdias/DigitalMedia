@@ -11,7 +11,6 @@ import org.springframework.security.web.server.authentication.logout.ServerLogou
 
 @RequiredArgsConstructor
 @Configuration
-
 public class SecurityConfig {
 
     private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
@@ -24,8 +23,7 @@ public class SecurityConfig {
                 .oauth2Login()
                 .and()
                 .logout()
-                .logoutSuccessHandler(oidcServerLogoutSuccessHandler())
-                ;
+                .logoutSuccessHandler(oidcServerLogoutSuccessHandler());
         return http.build();
     }
 

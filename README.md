@@ -2,9 +2,7 @@
 
 ## Preconditions
 
- > docker installed
-
- > maven installed
+> docker installed
 
 ## make.sh
 
@@ -24,5 +22,3 @@ Bills: 8088
 ## gateway-api
 
 ### Use the browser to test the gateway-api microservice
-
-

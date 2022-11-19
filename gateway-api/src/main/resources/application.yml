@@ -13,11 +13,13 @@ spring:
         provider:
           keycloak:
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
+            authorization-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/auth
+            user-name-attribute: preferred_username
         registration:
           gateway-api:
             provider: keycloak
             client-id: api-gateway
-            client-secret: ABPH9Or9uJfT21rm8zES6wv2iyVDi7gZ
+            client-secret: 745MnUKUHG5bp0RAwS8BjTkq9WrPvYDb
             authorization-grant-type: authorization_code
             redirect-uri: 'http://localhost:8080/login/oauth2/code/keycloak'
   cloud:
