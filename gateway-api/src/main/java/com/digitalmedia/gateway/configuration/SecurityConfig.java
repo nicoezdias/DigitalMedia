@@ -23,14 +23,15 @@ public class SecurityConfig {
                 .oauth2Login()
                 .and()
                 .logout()
-                .logoutSuccessHandler(oidcServerLogoutSuccessHandler());
+                .logoutSuccessHandler(oidcServerLogoutSuccessHandler())
+                ;
         return http.build();
     }
 
     private ServerLogoutSuccessHandler oidcServerLogoutSuccessHandler(){
         OidcClientInitiatedServerLogoutSuccessHandler oidcClientInitiatedLogoutSuccessHandler
                 = new OidcClientInitiatedServerLogoutSuccessHandler(reactiveClientRegistrationRepository);
-        oidcClientInitiatedLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8082/login");
+        oidcClientInitiatedLogoutSuccessHandler.setPostLogoutRedirectUri("${app.uri-keycloak-login}");
         return oidcClientInitiatedLogoutSuccessHandler;
     }
 }

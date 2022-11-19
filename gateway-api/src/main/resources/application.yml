@@ -1,8 +1,9 @@
 server:
-  port: ${PORT_MS:8080}
+  port: ${PORT_MS:8081}
 
 app:
   realm: digitalmedia
+  uri-keycloak-login: ${KEYCLOAK_URL:http://localhost:8082/}login
 
 spring:
   application:
@@ -13,8 +14,10 @@ spring:
         provider:
           keycloak:
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
+            token-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/token
             authorization-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/auth
-            user-name-attribute: preferred_username
+            userinfo-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/userinfo
+            scope: openid
         registration:
           gateway-api:
             provider: keycloak
@@ -34,16 +37,20 @@ spring:
           uri: lb://movies-service
           predicates:
             - Path=/movies/**
-        - id: billsRoute
-          uri: lb://bills-service
-          predicates:
-            - Path=/bills/**
+          filters:
+            - StripPrefix=2
         - id: usersRoute
           uri: lb://users-service
           predicates:
             - Path=/users/**
+          filters:
+            - StripPrefix=2
 
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+logging:
+  level:
+    org.springframework.web.client.RestTemplate: DEBUG

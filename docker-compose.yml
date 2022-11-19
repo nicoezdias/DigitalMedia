@@ -99,18 +99,18 @@ services:
       - "8086:8086"
     restart: always
 
-  users-service:
-    depends_on:
-      - eureka-service
-    container_name: "users-service"
-    environment:
-      PORT_MS: 8087
-      EUREKA_URL: http://eureka-service:8761/eureka
-      KEYCLOAK_URL: http://keycloak-service:8080/ 
-    image: users-service
-    ports:
-      - "8087:8087"
-    restart: always
+  # users-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "users-service"
+  #   environment:
+  #     PORT_MS: 8087
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak-service:8080/ 
+  #   image: users-service
+  #   ports:
+  #     - "8087:8087"
+  #   restart: always
 
   bills-service:
     depends_on:
