@@ -1,5 +1,11 @@
 # DigitalMedia
 
+### Lamentablemente no pude terminar de dockerizar el microservicio getway-api, mando el poryecto entero pero para probar su correcto funcionamiento debera provarlo localmente
+
+### Correr el doker-compose.yml para levantar bases de datos , eureka y keycloak.
+
+### Luego levantar el resto de los servicios.
+
 ## Preconditions
 
 > docker installed
