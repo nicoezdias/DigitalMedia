@@ -1,7 +1,6 @@
 version: '3.9'
 networks:
-  default:
-    name: local_keycloak_network
+    local_keycloak_network:
 services:
 # /* --------------------------------DATABASES-------------------------------- */
   mongo-movie:
@@ -16,6 +15,8 @@ services:
       - ./db/mongo-mvovie:/data/db
     ports:
       - "27017:27017"
+    networks:
+      - local_keycloak_network
   mongo-user:
     image: mongo
     container_name: "mongo-user"
@@ -28,6 +29,8 @@ services:
       - ./db/mongo-user:/data/db
     ports:
       - "27018:27017"
+    networks:
+      - local_keycloak_network
   mysqldb:
     image: mysql:8.0
     container_name: "mysqldb"
@@ -39,6 +42,8 @@ services:
       - ./db/mysql-data:/var/lib/mysql
     ports:
       - '3306:3306'
+    networks:
+      - local_keycloak_network
   postgres:
     image: postgres:latest
     container_name: "postgres"
@@ -51,6 +56,8 @@ services:
       - '5439:5439'
     volumes:
       - ./db/postgres-data:/var/lib/postgresql/data
+    networks:
+      - local_keycloak_network
 # /* --------------------------------------------------------------------------- */
 
 # /* --------------------------------KEYCLOAK-------------------------------- */
@@ -71,6 +78,8 @@ services:
     ports:
       - "8082:8080"
     restart: unless-stopped
+    networks:
+      - local_keycloak_network
 # /* ---------------------------------------------------------------------------- */
 
 # /* --------------------------------EUREKA----------------------------------- */
@@ -82,22 +91,26 @@ services:
     ports:
       - "8761:8761"
     restart: always
+    networks:
+      - local_keycloak_network
 # /* --------------------------------------------------------------------------- */
 
 # /* --------------------------------MICROSERVICES-------------------------- */
-  # movie-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "movie-service"
-  #   environment:
-  #     PORT_MS: 8086
-  #     DB_HOST: mongo-movie
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak-service:8080/
-  #   image: movie-service
-  #   ports:
-  #     - "8086:8086"
-  #   restart: always
+  movies-service:
+    depends_on:
+      - eureka-service
+    container_name: "movies-service"
+    environment:
+      PORT_MS: 8086
+      DB_HOST: mongo-movie
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/
+    image: movies-service
+    ports:
+      - "8086:8086"
+    restart: always
+    networks:
+      - local_keycloak_network
 
   # users-service:
   #   depends_on:
@@ -111,6 +124,8 @@ services:
   #   ports:
   #     - "8087:8087"
   #   restart: always
+  #   networks:
+  #     - local_keycloak_network
 
   # bills-service:
   #   depends_on:
@@ -125,17 +140,21 @@ services:
   #   ports:
   #     - "8088:8088"
   #   restart: always
+  #   networks:
+  #     - local_keycloak_network
 
-  # gateway-service:
-  #   depends_on:
-  #     - eureka-service
-  #   container_name: "gateway-service"
-  #   environment:
-  #     PORT_MS: 8080
-  #     EUREKA_URL: http://eureka-service:8761/eureka
-  #     KEYCLOAK_URL: http://keycloak-service:8080/ 
-  #   image: gateway-service
-  #   ports:
-  #     - "8080:8080"
-  #   restart: always
+  gateway-service:
+    depends_on:
+      - eureka-service
+    container_name: "gateway-service"
+    environment:
+      PORT_MS: 8080
+      EUREKA_URL: http://eureka-service:8761/eureka
+      KEYCLOAK_URL: http://keycloak-service:8080/ 
+    image: gateway-service
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - local_keycloak_network
 # /* --------------------------------------------------------------------------- */

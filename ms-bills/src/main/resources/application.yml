@@ -32,9 +32,9 @@ spring:
           keycloak:
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
             token-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/token
-            scope: openid
         registration:
           keycloak:
+            scope: openid
             authorization-grant-type: client_credentials
             client-id: internal
             client-secret: Lt3qO93ZYAADe0JieYL28sI9Ndla8WNl

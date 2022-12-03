@@ -18,20 +18,21 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http.authorizeExchange()
-                .anyExchange().authenticated()
+                .pathMatchers("/actuator/**").permitAll()
+                .anyExchange()
+                .authenticated()
                 .and()
                 .oauth2Login()
                 .and()
                 .logout()
-                .logoutSuccessHandler(oidcServerLogoutSuccessHandler())
-                ;
+                .logoutSuccessHandler(oidcServerLogoutSuccessHandler());
         return http.build();
     }
 
     private ServerLogoutSuccessHandler oidcServerLogoutSuccessHandler(){
         OidcClientInitiatedServerLogoutSuccessHandler oidcClientInitiatedLogoutSuccessHandler
                 = new OidcClientInitiatedServerLogoutSuccessHandler(reactiveClientRegistrationRepository);
-        oidcClientInitiatedLogoutSuccessHandler.setPostLogoutRedirectUri("${app.uri-keycloak-login}");
+        oidcClientInitiatedLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8080/login");
         return oidcClientInitiatedLogoutSuccessHandler;
     }
 }

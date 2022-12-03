@@ -1,4 +1,4 @@
-# FROM openjdk:8-jdk-alpine
+# FROM adoptopenjdk/openjdk11:alpine-jre
 # RUN apk update && apk add bash
 # ARG JAR_FILE=target/*.jar
 # COPY ${JAR_FILE} app.jar
@@ -8,7 +8,7 @@
 FROM maven:3.6.3 AS maven
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN mvn clean && mvn package 
+RUN mvn clean && mvn package -DskipTests
 
 FROM adoptopenjdk/openjdk11:alpine-jre
 RUN apk update && apk add bash

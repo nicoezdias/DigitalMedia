@@ -2,8 +2,9 @@ server:
   port: ${PORT_MS:8080}
 
 app:
+  numbus:
+    urlDecoder: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
   realm: digitalmedia
-  uri-keycloak-login: ${KEYCLOAK_URL:http://localhost:8082/}login
 
 spring:
   application:
@@ -11,50 +12,51 @@ spring:
   security:
     oauth2:
       client:
+        registration:
+          keycloak:
+            scope: openid
+#            provider: keycloak
+            client-id: api-gateway
+            client-secret: 745MnUKUHG5bp0RAwS8BjTkq9WrPvYDb
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:${server.port}/login/oauth2/code/{registrationId}
         provider:
           keycloak:
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
             authorization-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/auth
-            token-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/token
-#            introspection-uri: http://localhost:8082/realms/digitalmedia/protocol/openid-connect/token/introspect
             user-info-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/userinfo
-#            end_session_endpoint: http://localhost:8082/realms/digitalmedia/protocol/openid-connect/logout
-            jwk-set_uri: http://localhost:8082/realms/digitalmedia/protocol/openid-connect/certs
+            jwk-set-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/certs
+#            token-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/token
+#            introspection-uri: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/token/introspect
+#            end-session-uri: http://localhost:8082/realms/digitalmedia/protocol/openid-connect/logout
 #            check_session_iframe: http://localhost:8082/realms/digitalmedia/protocol/openid-connect/login-status-iframe.html
-            scope: openid
-        registration:
-          gateway-api:
-            provider: keycloak
-            client-id: api-gateway
-            client-secret: 745MnUKUHG5bp0RAwS8BjTkq9WrPvYDb
-            authorization-grant-type: client_credentials
-            redirect-uri: 'http://localhost:8080/login/oauth2/code/keycloak'
+#            device_authorization_endpoint: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/auth/device
+#            pushed_authorization_request_endpoint: http://localhost:8082/realms/${app.realm}/protocol/openid-connect/ext/par/request
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
-      default-filters:
-        - TokenRelay
+#      default-filters:
+#        - TokenRelay
       routes:
         - id: moviesRoute
-          uri: lb://movies-service
+          uri: http://movies-service:8086/
           predicates:
             - Path=/movies/**
-          filters:
-            - StripPrefix=2
         - id: usersRoute
-          uri: lb://users-service
+          uri: http://users-service:8087/
           predicates:
             - Path=/users/**
-          filters:
-            - StripPrefix=2
-
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
 
 logging:
   level:
-    org.springframework.web.client.RestTemplate: DEBUG
+    org:
+      springframework:
+        security: DEBUG

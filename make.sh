@@ -3,7 +3,7 @@
 # cd ..
 
 # cd movies-api/
-# docker build . -t movie-service
+# docker build . -t movies-service
 # cd ..
 
 # cd ms-bills/
@@ -14,8 +14,8 @@
 # docker build . -t users-service
 # cd ..
 
-# cd gateway-api/
-# docker build . -t gateway-service
-# cd ..
+cd gateway-api/
+docker build . -t gateway-service
+cd ..
 
 docker-compose up

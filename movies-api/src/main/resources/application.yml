@@ -54,6 +54,7 @@ spring:
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
         registration:
           keycloak:
+            scope: openid
             client-id: microservicios
             client-secret: Xhevm3MBBZPvc6zSOvammf5aEz11vIOM
-            redirect-uri: http://localhost:8085
+            redirect-uri: http://localhost:${server.port}
