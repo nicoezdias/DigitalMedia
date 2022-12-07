@@ -96,21 +96,21 @@ services:
 # /* --------------------------------------------------------------------------- */
 
 # /* --------------------------------MICROSERVICES-------------------------- */
-  movies-service:
-    depends_on:
-      - eureka-service
-    container_name: "movies-service"
-    environment:
-      PORT_MS: 8086
-      DB_HOST: mongo-movie
-      EUREKA_URL: http://eureka-service:8761/eureka
-      KEYCLOAK_URL: http://keycloak-service:8080/
-    image: movies-service
-    ports:
-      - "8086:8086"
-    restart: always
-    networks:
-      - local_keycloak_network
+  # movies-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "movies-service"
+  #   environment:
+  #     PORT_MS: 8086
+  #     DB_HOST: mongo-movie
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak-service:8080/
+  #   image: movies-service
+  #   ports:
+  #     - "8086:8086"
+  #   restart: always
+  #   networks:
+  #     - local_keycloak_network
 
   # users-service:
   #   depends_on:
@@ -143,20 +143,20 @@ services:
   #   networks:
   #     - local_keycloak_network
 
-  gateway-service:
-    depends_on:
-      - eureka-service
-    container_name: "gateway-service"
-    environment:
-      PORT_MS: 8080
-      EUREKA_URL: http://eureka-service:8761/eureka
-      KEYCLOAK_URL: http://keycloak-service:8080/ 
-      MOVIES_ROUTE_URL: http://movies-service:8086/
-      USERS_ROUTE_URL: http://users-service:8087/
-    image: gateway-service
-    ports:
-      - "8080:8080"
-    restart: always
-    networks:
-      - local_keycloak_network
+  # gateway-service:
+  #   depends_on:
+  #     - eureka-service
+  #   container_name: "gateway-service"
+  #   environment:
+  #     PORT_MS: 8080
+  #     EUREKA_URL: http://eureka-service:8761/eureka
+  #     KEYCLOAK_URL: http://keycloak-service:8080/ 
+  #     MOVIES_ROUTE_URL: http://movies-service:8086/
+  #     USERS_ROUTE_URL: http://users-service:8087/
+  #   image: gateway-service
+  #   ports:
+  #     - "8080:8080"
+  #   restart: always
+  #   networks:
+  #     - local_keycloak_network
 # /* --------------------------------------------------------------------------- */
