@@ -151,6 +151,8 @@ services:
       PORT_MS: 8080
       EUREKA_URL: http://eureka-service:8761/eureka
       KEYCLOAK_URL: http://keycloak-service:8080/ 
+      MOVIES_ROUTE_URL: http://movies-service:8086/
+      USERS_ROUTE_URL: http://users-service:8087/
     image: gateway-service
     ports:
       - "8080:8080"
