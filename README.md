@@ -14,6 +14,10 @@
 
 ### In the main folder use the command `sh make.sh` to start the whole project.
 
+## Keycloak
+
+### Keycloak realm imports/exports are done via Docker volumes
+
 ## Ports
 
 ```
